@@ -16,7 +16,7 @@
 填写:
 - Repository name: `wolfpack-dashboard`
 - Description: `狼牙团队监控仪表盘 - AI代理自主运营状态监控`
-- 选择 **Private** (私有)
+- 选择 **Public** (公共)
 - 勾选 **Add a README file** (可选)
 - 点击 **Create repository**
 
@@ -104,7 +104,7 @@ GitHub Pages 会自动重新部署（约1-2分钟生效）。
 
 ## 安全说明
 
-- 仓库为 **Private**，仅授权用户可查看代码
+- 仓库为 **public**，任何人可访问
 - 网站为 **Public**，任何人可访问（如需限制访问，需额外配置）
 - 建议不在前端代码中暴露敏感API密钥
 
