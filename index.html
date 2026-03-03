@@ -950,7 +950,8 @@
     <script>
         // 配置
         const CONFIG = {
-            apiUrl: './data/status.json',
+            apiUrl: 'http://101.126.40.132:5000/api/dashboard',
+            fallbackUrl: './data/status.json',
             refreshInterval: 30000, // 30秒
             retryDelay: 5000 // 重试延迟
         };
@@ -975,37 +976,63 @@
             showRefreshIndicator(true);
             document.getElementById('refreshBtn').disabled = true;
             
+            let data = null;
+            
+            // 先尝试API
             try {
-                // 添加时间戳防止缓存
                 const url = `${CONFIG.apiUrl}?t=${Date.now()}`;
                 const response = await fetch(url);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                if (response.ok) {
+                    const apiData = await response.json();
+                    // API返回格式适配
+                    data = {
+                        systemStatus: apiData.systemStatus || 'running',
+                        uptime: apiData.uptime || '--',
+                        lastUpdated: apiData.lastUpdated || new Date().toISOString(),
+                        metrics: apiData.metrics || apiData.data?.metrics || {
+                            activeAgents: 4,
+                            totalAgents: 4,
+                            completedTasks: 0,
+                            pendingTasks: 0
+                        },
+                        agents: apiData.agents || apiData.data?.agents || [],
+                        tomorrowTasks: apiData.tomorrowTasks || apiData.data?.tasks || [],
+                        logs: apiData.logs || apiData.data?.logs || []
+                    };
+                    console.log('API数据加载成功');
                 }
-                
-                const data = await response.json();
+            } catch (apiError) {
+                console.log('API加载失败，尝试本地数据:', apiError.message);
+            }
+            
+            // API失败，回退到本地JSON
+            if (!data) {
+                try {
+                    const response = await fetch(`${CONFIG.fallbackUrl}?t=${Date.now()}`);
+                    if (response.ok) {
+                        data = await response.json();
+                        console.log('本地数据加载成功');
+                    }
+                } catch (localError) {
+                    console.error('本地数据也加载失败:', localError.message);
+                    showError('数据加载失败，请检查网络连接');
+                }
+            }
+            
+            // 更新页面
+            if (data) {
                 updateDashboard(data);
                 hideLoadingOverlay();
-                showError(''); // 清除错误
-                
-            } catch (error) {
-                console.error('获取数据失败:', error);
-                showError(`获取数据失败: ${error.message}`);
-                
-                // 如果首次加载失败，显示错误状态
-                if (document.getElementById('loadingOverlay').style.display !== 'none') {
-                    setTimeout(() => {
-                        document.querySelector('.loading-text').textContent = '加载失败，5秒后重试...';
-                        setTimeout(fetchData, CONFIG.retryDelay);
-                    }, 500);
-                }
-            } finally {
-                isLoading = false;
-                showRefreshIndicator(false);
-                document.getElementById('refreshBtn').disabled = false;
-                updateLastRefreshTime();
+                showError('');
+            } else {
+                showError('无法加载数据，请刷新重试');
             }
+            
+            isLoading = false;
+            showRefreshIndicator(false);
+            document.getElementById('refreshBtn').disabled = false;
+            updateLastRefreshTime();
         }
         
         // 更新仪表盘
