@@ -948,11 +948,11 @@
     </div>
     
     <script>
-        // 配置
+        // 配置 - 7×24实时API
         const CONFIG = {
-            apiUrl: './status.json',  // 使用本地静态JSON
-            refreshInterval: 30000,
-            retryDelay: 5000
+            apiUrl: 'http://101.126.40.132:5000/api/dashboard',
+            refreshInterval: 10000, // 10秒刷新（实时）
+            retryDelay: 3000
         };
         
         // 状态
