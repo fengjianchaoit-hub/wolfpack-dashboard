@@ -37,6 +37,12 @@
             -webkit-text-fill-color: transparent;
         }
         
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
         .status-indicator {
             display: flex;
             align-items: center;
@@ -52,15 +58,250 @@
             animation: pulse 2s infinite;
         }
         
+        .status-dot.error {
+            background: #da3633;
+        }
+        
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+        
+        /* 加载动画 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 20, 25, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+        
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            margin-top: 15px;
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        /* 刷新指示器 */
+        .refresh-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #8b949e;
+        }
+        
+        .refresh-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #30363d;
+            border-top-color: #58a6ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .refresh-icon.idle {
+            animation: none;
+            border-color: #238636;
         }
         
         .container {
             padding: 30px;
             max-width: 1400px;
             margin: 0 auto;
+        }
+        
+        /* ==================== H5移动端适配 ==================== */
+        @media screen and (max-width: 768px) {
+            /* 头部适配 */
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .header-controls {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .status-indicator {
+                font-size: 12px;
+            }
+            
+            /* 容器适配 */
+            .container {
+                padding: 15px;
+            }
+            
+            /* 指标卡片单列显示 */
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .metric-card {
+                padding: 15px;
+            }
+            
+            .metric-label {
+                font-size: 11px;
+            }
+            
+            .metric-value {
+                font-size: 24px;
+            }
+            
+            /* 区块适配 */
+            .section {
+                margin-bottom: 15px;
+                border-radius: 10px;
+            }
+            
+            .section-header {
+                padding: 12px 15px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .section-title {
+                font-size: 14px;
+            }
+            
+            .refresh-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                align-self: flex-end;
+            }
+            
+            /* 代理卡片单列显示 */
+            .agent-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 15px;
+            }
+            
+            .agent-card {
+                padding: 15px;
+            }
+            
+            .agent-header {
+                margin-bottom: 12px;
+            }
+            
+            .agent-name {
+                font-size: 16px;
+            }
+            
+            .agent-role {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            
+            .agent-status {
+                font-size: 12px;
+            }
+            
+            /* 任务列表横向滚动 */
+            .task-list-section {
+                padding: 15px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .task-table {
+                min-width: 600px;
+                font-size: 12px;
+            }
+            
+            .task-table th,
+            .task-table td {
+                padding: 10px 8px;
+            }
+            
+            .badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            
+            /* 加载动画适配 */
+            .loading-text {
+                font-size: 12px;
+            }
+            
+            /* 刷新指示器 */
+            .refresh-indicator {
+                font-size: 11px;
+            }
+        }
+        
+        /* 超小屏幕适配 */
+        @media screen and (max-width: 375px) {
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .metric-value {
+                font-size: 20px;
+            }
+            
+            .agent-name {
+                font-size: 14px;
+            }
+            
+            .task-table {
+                min-width: 500px;
+            }
+        }
+        
+        /* 触摸优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .metric-card:hover {
+                transform: none;
+            }
+            
+            .refresh-btn {
+                min-height: 36px;
+                min-width: 70px;
+            }
+            
+            .task-table tr:hover {
+                background: transparent;
+            }
         }
         
         .metrics-grid {
@@ -132,11 +373,17 @@
             border-radius: 10px;
             padding: 20px;
             position: relative;
+            transition: all 0.3s ease;
         }
         
         .agent-card.leader {
             border-color: #ffd700;
             background: linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
+        }
+        
+        .agent-card:hover {
+            border-color: #58a6ff;
+            transform: translateY(-2px);
         }
         
         .agent-header {
@@ -181,9 +428,17 @@
             background: #238636;
         }
         
+        .status-badge.offline {
+            background: #6e7681;
+        }
+        
         .status-badge.busy {
             background: #f0883e;
             animation: blink 1s infinite;
+        }
+        
+        .status-badge.error {
+            background: #da3633;
         }
         
         @keyframes blink {
@@ -296,19 +551,317 @@
             cursor: pointer;
             font-size: 13px;
             transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .refresh-btn:hover {
             background: #2ea043;
         }
+        
+        .refresh-btn:disabled {
+            background: #30363d;
+            cursor: not-allowed;
+        }
+        
+        /* 错误提示 */
+        .error-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #da3633;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+        
+        .error-toast.show {
+            transform: translateX(0);
+        }
+        
+        /* ==================== 移动端响应式适配 ==================== */
+        
+        /* 平板适配 (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .agent-grid {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 15px;
+                padding: 15px;
+            }
+        }
+        
+        /* 手机适配 (最大767px) */
+        @media (max-width: 767px) {
+            /* 基础布局调整 */
+            body {
+                font-size: 14px;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+            
+            /* 头部适配 */
+            .header {
+                padding: 12px 15px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .status-indicator {
+                font-size: 12px;
+            }
+            
+            .refresh-indicator {
+                font-size: 11px;
+            }
+            
+            /* 指标卡片 - 手机单列 */
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .metric-card {
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .metric-card:hover {
+                transform: none;
+            }
+            
+            .metric-label {
+                font-size: 12px;
+                margin-bottom: 0;
+            }
+            
+            .metric-value {
+                font-size: 24px;
+            }
+            
+            /* 区块标题适配 */
+            .section-header {
+                padding: 12px 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .section-title {
+                font-size: 15px;
+            }
+            
+            /* 代理卡片 - 手机单列 */
+            .agent-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
+            }
+            
+            .agent-card {
+                padding: 15px;
+            }
+            
+            .agent-card:hover {
+                transform: none;
+            }
+            
+            .agent-name {
+                font-size: 16px;
+            }
+            
+            .agent-role {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            
+            .agent-status {
+                font-size: 12px;
+            }
+            
+            .agent-tasks {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+            
+            .task-item {
+                padding: 6px 0;
+                font-size: 12px;
+            }
+            
+            /* 按钮 - 触摸友好 (最小44px) */
+            .refresh-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-height: 44px;
+                min-width: 100px;
+                align-self: stretch;
+                justify-content: center;
+            }
+            
+            /* 表格横向滚动 */
+            .task-list-section {
+                padding: 12px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .task-table {
+                min-width: 600px;
+                font-size: 13px;
+            }
+            
+            .task-table th,
+            .task-table td {
+                padding: 10px 8px;
+                white-space: nowrap;
+            }
+            
+            /* 徽章适配 */
+            .badge {
+                padding: 3px 8px;
+                font-size: 10px;
+            }
+            
+            /* 错误提示适配 */
+            .error-toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                transform: translateY(150%);
+            }
+            
+            .error-toast.show {
+                transform: translateY(0);
+            }
+            
+            /* 时间戳 */
+            .timestamp {
+                font-size: 11px;
+            }
+            
+            /* 加载动画 */
+            .spinner {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .loading-text {
+                font-size: 13px;
+            }
+        }
+        
+        /* 小屏手机适配 (最大375px) */
+        @media (max-width: 375px) {
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .metric-value {
+                font-size: 20px;
+            }
+            
+            .agent-name {
+                font-size: 14px;
+            }
+            
+            .section-title {
+                font-size: 14px;
+            }
+            
+            .task-table {
+                min-width: 500px;
+                font-size: 12px;
+            }
+        }
+        
+        /* 横屏手机适配 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header {
+                padding: 8px 15px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .metric-card {
+                padding: 10px 15px;
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .metric-card:hover,
+            .agent-card:hover {
+                transform: none;
+                border-color: #30363d;
+            }
+            
+            .metric-card:active,
+            .agent-card:active {
+                border-color: #58a6ff;
+                background: #1c2128;
+            }
+            
+            /* 增大触摸目标 */
+            .refresh-btn {
+                touch-action: manipulation;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">正在加载数据...</div>
+    </div>
+    
+    <!-- 错误提示 -->
+    <div class="error-toast" id="errorToast"></div>
+    
     <div class="header">
         <h1>🐺 狼牙团队监控仪表盘</h1>
-        <div class="status-indicator">
-            <div class="status-dot"></div>
-            <span>系统正常运行</span>
+        <div class="header-controls">
+            <div class="refresh-indicator">
+                <div class="refresh-icon idle" id="refreshIcon"></div>
+                <span id="lastUpdate">更新于: --:--:--</span>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="systemStatusDot"></div>
+                <span id="systemStatus">系统正常运行</span>
+            </div>
             <span class="timestamp" id="current-time"></span>
         </div>
     </div>
@@ -318,19 +871,19 @@
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-label">活跃代理</div>
-                <div class="metric-value">4/4</div>
+                <div class="metric-value" id="metric-agents">--/--</div>
             </div>
             <div class="metric-card">
                 <div class="metric-label">今日完成任务</div>
-                <div class="metric-value">12</div>
+                <div class="metric-value" id="metric-completed">--</div>
             </div>
             <div class="metric-card">
                 <div class="metric-label">待处理任务</div>
-                <div class="metric-value">3</div>
+                <div class="metric-value" id="metric-pending">--</div>
             </div>
             <div class="metric-card">
                 <div class="metric-label">系统运行时间</div>
-                <div class="metric-value" id="uptime">48h</div>
+                <div class="metric-value" id="uptime">--</div>
             </div>
         </div>
         
@@ -338,112 +891,20 @@
         <div class="section">
             <div class="section-header">
                 <div class="section-title">🤖 代理状态监控</div>
-                <button class="refresh-btn" onclick="refreshData()">刷新数据</button>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
+                    <span>↻</span> 刷新数据
+                </button>
             </div>
-            <div class="agent-grid">
-                <!-- 狼头 -->
-                <div class="agent-card leader">
-                    <div class="agent-header">
-                        <div class="agent-name">🔥 狼头</div>
-                        <span class="agent-role leader">团队负责人</span>
-                    </div>
-                    <div class="agent-status">
-                        <div class="status-badge"></div>
-                        <span>在线 - 统筹管理中</span>
-                    </div>
-                    <div class="agent-tasks">
-                        <div class="task-item">
-                            <span class="task-status done">✓</span>
-                            <span>团队搭建完成</span>
-                        </div>
-                        <div class="task-item">
-                            <span class="task-status done">✓</span>
-                            <span>复盘报告上传</span>
-                        </div>
-                        <div class="task-item">
-                            <span class="task-status pending">◐</span>
-                            <span>监控仪表盘搭建</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 狼牙01 -->
-                <div class="agent-card">
-                    <div class="agent-header">
-                        <div class="agent-name">📝 狼牙01</div>
-                        <span class="agent-role">文案编辑</span>
-                    </div>
-                    <div class="agent-status">
-                        <div class="status-badge"></div>
-                        <span>待命 - 等待明日任务</span>
-                    </div>
-                    <div class="agent-tasks">
-                        <div class="task-item">
-                            <span class="task-status done">✓</span>
-                            <span>抖音报告优化</span>
-                        </div>
-                        <div class="task-item">
-                            <span class="task-status done">✓</span>
-                            <span>飞书简报生成</span>
-                        </div>
-                        <div class="task-item">
-                            <span class="task-status todo">○</span>
-                            <span>明早9点AI日报</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 狼牙02 -->
-                <div class="agent-card">
-                    <div class="agent-header">
-                        <div class="agent-name">📊 狼牙02</div>
-                        <span class="agent-role">数据分析</span>
-                    </div>
-                    <div class="agent-status">
-                        <div class="status-badge"></div>
-                        <span>待命 - 等待明日任务</span>
-                    </div>
-                    <div class="agent-tasks">
-                        <div class="task-item">
-                            <span class="task-status done">✓</span>
-                            <span>数据分析能力就绪</span>
-                        </div>
-                        <div class="task-item">
-                            <span class="task-status todo">○</span>
-                            <span>明早10点直播数据分析</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 狼牙03 -->
-                <div class="agent-card">
-                    <div class="agent-header">
-                        <div class="agent-name">📈 狼牙03</div>
-                        <span class="agent-role">可视化</span>
-                    </div>
-                    <div class="agent-status">
-                        <div class="status-badge"></div>
-                        <span>待命 - 等待明日任务</span>
-                    </div>
-                    <div class="agent-tasks">
-                        <div class="task-item">
-                            <span class="task-status done">✓</span>
-                            <span>可视化能力就绪</span>
-                        </div>
-                        <div class="task-item">
-                            <span class="task-status todo">○</span>
-                            <span>明早11点数据看板</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="agent-grid" id="agentGrid">
+                <!-- 动态生成代理卡片 -->
             </div>
         </div>
         
         <!-- 任务清单 -->
         <div class="section">
             <div class="section-header">
-                <div class="section-title">📋 明日任务清单 (2026-03-04)</div>
-                <span class="timestamp">3个待执行任务</span>
+                <div class="section-title" id="taskListTitle">📋 明日任务清单</div>
+                <span class="timestamp" id="taskCount">--个待执行任务</span>
             </div>
             <div class="task-list-section">
                 <table class="task-table">
@@ -456,28 +917,8 @@
                             <th>状态</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>09:00</td>
-                            <td>狼牙01</td>
-                            <td>生成AI热点日报</td>
-                            <td><span class="badge badge-high">高</span></td>
-                            <td>⏳ 待执行</td>
-                        </tr>
-                        <tr>
-                            <td>10:00</td>
-                            <td>狼牙02</td>
-                            <td>分析昨日直播数据（含行为洞察）</td>
-                            <td><span class="badge badge-high">高</span></td>
-                            <td>⏳ 待执行</td>
-                        </tr>
-                        <tr>
-                            <td>11:00</td>
-                            <td>狼牙03</td>
-                            <td>生成数据看板（含视觉重点）</td>
-                            <td><span class="badge badge-medium">中</span></td>
-                            <td>⏳ 待执行</td>
-                        </tr>
+                    <tbody id="taskTableBody">
+                        <!-- 动态生成任务列表 -->
                     </tbody>
                 </table>
             </div>
@@ -498,37 +939,8 @@
                             <th>结果</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="timestamp">15:07</td>
-                            <td>狼头</td>
-                            <td>创建狼牙03</td>
-                            <td>✅ 成功</td>
-                        </tr>
-                        <tr>
-                            <td class="timestamp">15:07</td>
-                            <td>狼头</td>
-                            <td>创建狼牙02</td>
-                            <td>✅ 成功</td>
-                        </tr>
-                        <tr>
-                            <td class="timestamp">15:05</td>
-                            <td>狼头</td>
-                            <td>更新团队管理规范</td>
-                            <td>✅ 成功</td>
-                        </tr>
-                        <tr>
-                            <td class="timestamp">14:55</td>
-                            <td>狼头</td>
-                            <td>上传复盘报告到语雀</td>
-                            <td>✅ 成功</td>
-                        </tr>
-                        <tr>
-                            <td class="timestamp">14:30</td>
-                            <td>狼头</td>
-                            <td>停止抖音抓取任务</td>
-                            <td>✅ 成功</td>
-                        </tr>
+                    <tbody id="logTableBody">
+                        <!-- 动态生成日志 -->
                     </tbody>
                 </table>
             </div>
@@ -536,6 +948,219 @@
     </div>
     
     <script>
+        // 配置
+        const CONFIG = {
+            apiUrl: './data/status.json',
+            refreshInterval: 30000, // 30秒
+            retryDelay: 5000 // 重试延迟
+        };
+        
+        // 状态
+        let refreshTimer = null;
+        let isLoading = false;
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchData();
+            startAutoRefresh();
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+        
+        // 获取数据
+        async function fetchData() {
+            if (isLoading) return;
+            
+            isLoading = true;
+            showRefreshIndicator(true);
+            document.getElementById('refreshBtn').disabled = true;
+            
+            try {
+                // 添加时间戳防止缓存
+                const url = `${CONFIG.apiUrl}?t=${Date.now()}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                updateDashboard(data);
+                hideLoadingOverlay();
+                showError(''); // 清除错误
+                
+            } catch (error) {
+                console.error('获取数据失败:', error);
+                showError(`获取数据失败: ${error.message}`);
+                
+                // 如果首次加载失败，显示错误状态
+                if (document.getElementById('loadingOverlay').style.display !== 'none') {
+                    setTimeout(() => {
+                        document.querySelector('.loading-text').textContent = '加载失败，5秒后重试...';
+                        setTimeout(fetchData, CONFIG.retryDelay);
+                    }, 500);
+                }
+            } finally {
+                isLoading = false;
+                showRefreshIndicator(false);
+                document.getElementById('refreshBtn').disabled = false;
+                updateLastRefreshTime();
+            }
+        }
+        
+        // 更新仪表盘
+        function updateDashboard(data) {
+            // 更新系统状态
+            updateSystemStatus(data.systemStatus, data.uptime);
+            
+            // 更新指标
+            document.getElementById('metric-agents').textContent = 
+                `${data.metrics.activeAgents}/${data.metrics.totalAgents}`;
+            document.getElementById('metric-completed').textContent = data.metrics.completedTasks;
+            document.getElementById('metric-pending').textContent = data.metrics.pendingTasks;
+            document.getElementById('uptime').textContent = data.uptime;
+            
+            // 更新代理状态
+            renderAgents(data.agents);
+            
+            // 更新任务列表
+            renderTasks(data.tomorrowTasks);
+            
+            // 更新日志
+            renderLogs(data.logs);
+        }
+        
+        // 更新系统状态
+        function updateSystemStatus(status, uptime) {
+            const dot = document.getElementById('systemStatusDot');
+            const text = document.getElementById('systemStatus');
+            
+            document.getElementById('uptime').textContent = uptime;
+            
+            switch (status) {
+                case 'running':
+                    dot.className = 'status-dot';
+                    text.textContent = '系统正常运行';
+                    break;
+                case 'warning':
+                    dot.className = 'status-dot busy';
+                    text.textContent = '系统警告';
+                    break;
+                case 'error':
+                    dot.className = 'status-dot error';
+                    text.textContent = '系统异常';
+                    break;
+                default:
+                    dot.className = 'status-dot';
+                    text.textContent = '系统正常运行';
+            }
+        }
+        
+        // 渲染代理卡片
+        function renderAgents(agents) {
+            const container = document.getElementById('agentGrid');
+            container.innerHTML = agents.map(agent => `
+                <div class="agent-card ${agent.isLeader ? 'leader' : ''}" data-agent-id="${agent.id}">
+                    <div class="agent-header">
+                        <div class="agent-name">${agent.emoji} ${agent.name}</div>
+                        <span class="agent-role ${agent.isLeader ? 'leader' : ''}">${agent.role}</span>
+                    </div>
+                    <div class="agent-status">
+                        <div class="status-badge ${getStatusClass(agent.status, agent.isBusy)}"></div>
+                        <span>${agent.statusText}</span>
+                    </div>
+                    <div class="agent-tasks">
+                        ${agent.tasks.map(task => `
+                            <div class="task-item">
+                                <span class="task-status ${task.status}">${getTaskIcon(task.status)}</span>
+                                <span>${task.text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 获取状态样式类
+        function getStatusClass(status, isBusy) {
+            if (status === 'offline') return 'offline';
+            if (isBusy) return 'busy';
+            if (status === 'error') return 'error';
+            return '';
+        }
+        
+        // 获取任务图标
+        function getTaskIcon(status) {
+            const icons = {
+                'done': '✓',
+                'pending': '◐',
+                'todo': '○'
+            };
+            return icons[status] || '○';
+        }
+        
+        // 渲染任务列表
+        function renderTasks(tasks) {
+            const tbody = document.getElementById('taskTableBody');
+            const taskCount = tasks.filter(t => t.status === 'pending').length;
+            document.getElementById('taskCount').textContent = `${taskCount}个待执行任务`;
+            
+            tbody.innerHTML = tasks.map(task => `
+                <tr>
+                    <td>${task.time}</td>
+                    <td>${task.assignee}</td>
+                    <td>${task.task}</td>
+                    <td><span class="badge badge-${task.priority}">${getPriorityText(task.priority)}</span></td>
+                    <td>${getStatusText(task.status)}</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 渲染日志
+        function renderLogs(logs) {
+            const tbody = document.getElementById('logTableBody');
+            tbody.innerHTML = logs.map(log => `
+                <tr>
+                    <td class="timestamp">${log.time}</td>
+                    <td>${log.agent}</td>
+                    <td>${log.action}</td>
+                    <td>${getResultIcon(log.result)} ${log.result}</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 获取优先级文本
+        function getPriorityText(priority) {
+            const map = { 'high': '高', 'medium': '中', 'low': '低' };
+            return map[priority] || priority;
+        }
+        
+        // 获取状态文本
+        function getStatusText(status) {
+            const map = {
+                'pending': '⏳ 待执行',
+                'in_progress': '🔄 进行中',
+                'completed': '✅ 已完成',
+                'failed': '❌ 失败'
+            };
+            return map[status] || status;
+        }
+        
+        // 获取结果图标
+        function getResultIcon(result) {
+            return result === '成功' ? '✅' : '❌';
+        }
+        
+        // 显示刷新指示器
+        function showRefreshIndicator(loading) {
+            const icon = document.getElementById('refreshIcon');
+            if (loading) {
+                icon.classList.remove('idle');
+            } else {
+                icon.classList.add('idle');
+            }
+        }
+        
         // 更新时间
         function updateTime() {
             const now = new Date();
@@ -550,14 +1175,64 @@
             document.getElementById('current-time').textContent = timeStr;
         }
         
-        // 刷新数据
-        function refreshData() {
-            location.reload();
+        // 更新最后刷新时间
+        function updateLastRefreshTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN');
+            document.getElementById('lastUpdate').textContent = `更新于: ${timeStr}`;
         }
         
-        // 初始化
-        updateTime();
-        setInterval(updateTime, 1000);
+        // 隐藏加载遮罩
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('hidden');
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const toast = document.getElementById('errorToast');
+            if (message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 5000);
+            } else {
+                toast.classList.remove('show');
+            }
+        }
+        
+        // 刷新数据
+        function refreshData() {
+            fetchData();
+        }
+        
+        // 启动自动刷新
+        function startAutoRefresh() {
+            if (refreshTimer) clearInterval(refreshTimer);
+            refreshTimer = setInterval(() => {
+                console.log('[自动刷新] 正在获取最新数据...');
+                fetchData();
+            }, CONFIG.refreshInterval);
+        }
+        
+        // 停止自动刷新
+        function stopAutoRefresh() {
+            if (refreshTimer) {
+                clearInterval(refreshTimer);
+                refreshTimer = null;
+            }
+        }
+        
+        // 页面可见性变化处理
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // 页面隐藏时降低刷新频率或暂停
+                console.log('[仪表盘] 页面隐藏，降低刷新频率');
+            } else {
+                // 页面显示时立即刷新
+                console.log('[仪表盘] 页面显示，立即刷新数据');
+                fetchData();
+            }
+        });
     </script>
 </body>
 </html>
